@@ -1,0 +1,57 @@
+@import url(main.css);
+
+/* Privacy Policy Page Styles */
+.privacy-content {
+    max-height: 70vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.privacy-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.privacy-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.privacy-content::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 10px;
+}
+
+.privacy-section h2 {
+    color: var(--primary-color);
+    font-size: 1.4rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.privacy-section p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.privacy-section ul {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.privacy-section li {
+    margin-bottom: 0.5rem;
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: 10px;
+    padding: 0.70rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+}

@@ -1,0 +1,13 @@
+:root {
+    --primary-color: #4a6cf7;
+    --secondary-color: #6a7adb;
+    --bg-light-gray: #f4f6f9;
+    --glass-white: rgba(255, 255, 255, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.4);
+}
+
+body {
+    background-color: var(--bg-light-gray);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(135deg, #f0f4fc 0%, #e6ebf5 100%);
+}

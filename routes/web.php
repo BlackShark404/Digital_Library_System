@@ -14,9 +14,9 @@ $router->map('GET', '/unauthorized', 'App\Controllers\HomeController#unauthorize
 $router->map('GET', '/contact-us', 'App\Controllers\StaticPagesController#contactUs', 'contact_us');
 
 // Auth routes
-$router->map('GET', '/login', 'App\Controllers\AuthController#loginForm', 'login');
+$router->map('GET', '/login', 'App\Controllers\AuthController#showLoginForm', 'login');
 $router->map('POST', '/login', 'App\Controllers\AuthController#login', 'login_post');
-$router->map('GET', '/register', 'App\Controllers\AuthController#registerForm', 'register');
+$router->map('GET', '/register', 'App\Controllers\AuthController#showRegisterForm', 'register');
 $router->map('POST', '/register', 'App\Controllers\AuthController#register', 'register_post');
 $router->map('GET', '/logout', 'App\Controllers\AuthController#logout', 'logout');
 
@@ -28,7 +28,4 @@ $router->map('GET', '/errors/404', 'App\Controllers\ErrorController#error404', '
 $router->map('GET', '/errors/403', 'App\Controllers\ErrorController#error403', 'error_403');
 $router->map('GET', '/errors/500', 'App\Controllers\ErrorController#error500', 'error_500');
 
-// API routes for Axios
-$router->map('POST', '/api/login', 'App\Controllers\AuthController#apiLogin', 'api_login');
-$router->map('POST', '/api/logout', 'App\Controllers\AuthController#apiLogout', 'api_logout');
-$router->map('GET', '/api/user', 'App\Controllers\AuthController#apiCheckUser', 'api_check_user');
+$router->map('GET', '/test2', 'App\Controllers\TestController#test2', 'test2');
