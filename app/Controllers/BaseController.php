@@ -37,10 +37,10 @@ class BaseController
 
     protected function renderError($message, $statusCode = 500) {
         http_response_code($statusCode);
-        $errorView = __DIR__ . "/../Views/errors/$statusCode.php";
+        $errorView = __DIR__ . "/../Views/error/$statusCode.php";
 
         if (file_exists($errorView)) {
-            $this->render("errors/$statusCode", ['message' => $message]);
+            $this->render("error/$statusCode", ['message' => $message]);
         } else {
             echo "<h1>Error: $statusCode</h1><p>$message</p>";
         }

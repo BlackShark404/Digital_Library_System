@@ -4,8 +4,10 @@ namespace Core;
 
 class AuthMiddleware
 {
+    
     public static function requireLogin(string $redirectTo = '/login'): void
     {
+
         if (!isset($_SESSION['user_id'])) {
             header("Location: $redirectTo");
             exit;
@@ -28,7 +30,7 @@ class AuthMiddleware
         exit;
     }
 
-    public static function requireRole(array $allowedRoles = [], string $redirectTo = '/errors/403'): void
+    public static function requireRole(array $allowedRoles = [], string $redirectTo = '/error/403'): void
     {
         if (!isset($_SESSION['user_role']) || !in_array($_SESSION['user_role'], $allowedRoles)) {
             header("Location: $redirectTo");

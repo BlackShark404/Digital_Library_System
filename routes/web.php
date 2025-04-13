@@ -5,10 +5,9 @@ $router->setBasePath(''); // Set this if your app is in a subdirectory
 // Home routes
 $router->map('GET', '/', 'App\Controllers\HomeController#index', 'home');
 $router->map('GET', '/about', 'App\Controllers\HomeController#about', 'about');
-$router->map('GET', '/contact', 'App\Controllers\HomeController#contact', 'contact');
-$router->map('POST', '/contact', 'App\Controllers\HomeController#contact', 'contact_post');
-$router->map('GET', '/admin', 'App\Controllers\HomeController#adminDashboard', 'admin_dashboard');
-$router->map('GET', '/unauthorized', 'App\Controllers\HomeController#unauthorized', 'unauthorized');
+$router->map('GET', '/contact-us', 'App\Controllers\HomeController#contactUs', 'contact');
+$router->map('POST', '/contact-us', 'App\Controllers\HomeController#contactUs', 'contact_post');
+$router->map('GET', '/privacy', 'App\Controllers\HomeController#adminDashboard', 'admin_dashboard');
 
 // Static pages routes
 $router->map('GET', '/contact-us', 'App\Controllers\StaticPagesController#contactUs', 'contact_us');
@@ -24,8 +23,8 @@ $router->map('GET', '/logout', 'App\Controllers\AuthController#logout', 'logout'
 $router->map('GET', '/user/dashboard', 'App\Controllers\UserController#dashboard', 'dashboard');
 
 // Error routes
-$router->map('GET', '/errors/404', 'App\Controllers\ErrorController#error404', 'error_404');
-$router->map('GET', '/errors/403', 'App\Controllers\ErrorController#error403', 'error_403');
-$router->map('GET', '/errors/500', 'App\Controllers\ErrorController#error500', 'error_500');
+$router->map('GET', '/error/404', 'App\Controllers\ErrorController#error404', 'error_404');
+$router->map('GET', '/error/403', 'App\Controllers\ErrorController#error403', 'error_403');
+$router->map('GET', '/error/500', 'App\Controllers\ErrorController#error500', 'error_500');
 
-$router->map('GET', '/test2', 'App\Controllers\TestController#test2', 'test2');
+$router->map('GET', '/admin/dashboard', 'App\Controllers\AuthController#adminDashboard', 'test2');

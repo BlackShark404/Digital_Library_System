@@ -18,4 +18,15 @@ class AuthController extends BaseController{
         $this->render('auth/login');
     }
 
+    public function login() {
+
+    }
+
+    public function register() {
+
+    }
+
+    public function adminDashboard() {
+        $this->render('admin/dashboard');
+    }
 }

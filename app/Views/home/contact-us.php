@@ -236,10 +236,10 @@
                 <ul class="navbar-nav ms-auto">
                     
                     <li class="nav-item ms-lg-3">
-                        <a class="nav-link btn btn-outline-primary" href="login.php">Login</a>
+                        <a class="nav-link btn btn-outline-primary" href="/login">Login</a>
                     </li>
                     <li class="nav-item ms-lg-2">
-                        <a class="nav-link btn btn-primary text-white" href="register.php">Create Account</a>
+                        <a class="nav-link btn btn-primary text-white" href="/register">Create Account</a>
                     </li>
                 </ul>
             </div>

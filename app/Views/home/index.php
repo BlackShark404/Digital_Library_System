@@ -387,28 +387,28 @@
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="book-preview">
-                        <img src="/api/placeholder/400/500" alt="Book Cover" class="img-fluid">
+                        <img src="/assets/images/cover/In Search of Lost Time Cover.jpg" alt="Book Cover" class="img-fluid">
                         <div class="book-overlay">
-                            <h5>The Digital Universe</h5>
-                            <p class="mb-0">By Maria Johnson</p>
+                            <h5>In Search of Lost Time</h5>
+                            <p class="mb-0">By Marcel Proust</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="book-preview">
-                        <img src="/api/placeholder/400/500" alt="Book Cover" class="img-fluid">
+                        <img src="/assets/images/cover/To Kill a Mockingbird Cover.jpg" alt="Book Cover" class="img-fluid">
                         <div class="book-overlay">
-                            <h5>Programming Fundamentals</h5>
-                            <p class="mb-0">By John Smith</p>
+                            <h5>To Kill a Mockingbird</h5>
+                            <p class="mb-0">By Harper Lee</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="book-preview">
-                        <img src="/api/placeholder/400/500" alt="Book Cover" class="img-fluid">
+                        <img src="/assets/images/cover/The Great Gatsby Cover.jpg" alt="Book Cover" class="img-fluid">
                         <div class="book-overlay">
-                            <h5>The Art of Design</h5>
-                            <p class="mb-0">By Sarah Williams</p>
+                            <h5>The Great Gatsby</h5>
+                            <p class="mb-0">By F. Scott Fitzgerald</p>
                         </div>
                     </div>
                 </div>

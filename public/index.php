@@ -1,11 +1,14 @@
 <?php
 // index.php - Main entry point for the application
 
+use Core\Session;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 session_start();
 
-$_SESSION['user_id'] = "123";
+Session::set("user_id", 123);
+Session::set("user_role", "user");
 
 use Dotenv\Dotenv;
 use Core\AuthMiddleware;
