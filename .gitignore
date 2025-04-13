@@ -1,6 +1,5 @@
 # PHP Vendor
 vendor/
-composer.lock
 
 # Node JS
 node_modules/
