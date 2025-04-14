@@ -21,6 +21,10 @@
             --transition: all 0.3s ease;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #f5f7fa;
@@ -185,6 +189,31 @@
         .pricing-card.highlighted {
             border: 2px solid var(--primary-color);
             position: relative;
+        }
+
+        .flash-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.4s ease-out forwards;
+        }
+
+            .toast {
+                margin-bottom: 25px;
+            }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .highlight-badge {
@@ -689,9 +718,15 @@
         </div>
     </footer>
 
+    <?php
+    ?>
+
+    
+
+
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="/assets/js/utility/toast.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Select all FAQ question buttons
@@ -721,3 +756,6 @@
             });
         });
     </script>
+</body>
+
+</html>
