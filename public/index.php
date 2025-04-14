@@ -1,61 +1,42 @@
 <?php
 // index.php - Main entry point for the application
 
+// Autoload dependencies
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Use necessary classes
 use Core\Session;
-
-require __DIR__ . '/../vendor/autoload.php';
-
-session_start();
-
-Session::set("user_id", 123);
-Session::set("user_role", "user");
-
-use Dotenv\Dotenv;
+use AltoRouter as Router;
 use Core\AuthMiddleware;
+use Dotenv\Dotenv;
 
 // Load environment variables
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-$publicRoutes = [
-    '/',
-    '/login',
-    '/register',
-];
-
-$accessMap = [
-    // Admin-only routes
-    '/admin/dashboard' => ['admin'],
-    '/admin/users' => ['admin'],
-    '/admin/books' => ['admin'],
-    '/admin/reading' => ['admin'],
-    '/admin/purchases' => ['admin'],
-    '/admin/logs' => ['admin'],
-    
-    // Shared routes (if any)
-    '/dashboard' => ['admin', 'user'],
-
-    // Logout route (any logged-in role can use)
-    '/logout' => ['admin', 'user'],
-];
-
-AuthMiddleware::handle($accessMap, $publicRoutes);
-
-use AltoRouter as Router;
-
 // Initialize router
 $router = new Router();
 
-require_once __DIR__. '/../routes/web.php';
+// Include route definitions
+require_once __DIR__ . '/../routes/web.php';
 
-// Match the current request
+// Middleware to handle authentication
+AuthMiddleware::handle($accessMap, $publicRoutes);
+
+// Set session flash messages
+Session::flash('success', 'Account updated successfully!');
+Session::flash('error', 'Email is already in use!');
+Session::flash('warning', 'Password is too weak.');
+Session::flash('info', 'New features added.');
+
+// Match the current request to a route
 $match = $router->match();
 
 if ($match) {
     // Split the controller and method
     list($controller, $method) = explode('#', $match['target']);
 
-    // Instantiate controller
+    // Instantiate the controller
     $controllerInstance = new $controller();
 
     // Call the method with parameters
