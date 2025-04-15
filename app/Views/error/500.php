@@ -161,10 +161,9 @@
         
         <div class="d-flex gap-3">
             <a href="/" class="btn btn-primary">Back to Home</a>
-            <a href="/contact.php" class="btn btn-outline-primary">Contact Support</a>
+            <a href="#" class="btn btn-outline-primary">Contact Support</a>
         </div>
     </div>
-
 
     <!-- Footer -->
     <footer class="py-3 bg-white border-top">

@@ -161,7 +161,7 @@
         
         <div class="d-flex gap-3">
             <a href="/" class="btn btn-primary">Back to Home</a>
-            <a href="/login.php" class="btn btn-outline-primary">Login</a>
+            <a href="/login" class="btn btn-outline-primary">Login</a>
         </div>
     </div>
 
