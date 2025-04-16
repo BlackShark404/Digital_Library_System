@@ -16,23 +16,49 @@ class BaseController
         return $this->db;
     }
 
-    protected function render($view, $data = []) {
-        $viewPath = __DIR__ . "/../Views/$view.php";
+    protected function getViewPath(string $relativePath): string {
+        $path = __DIR__ . "/../Views/{$relativePath}.php";
 
-        if (file_exists($viewPath)) {
-            ob_start();
-            extract($data);
-            include($viewPath);
-            $content = ob_get_clean();
-            echo $content;
-        } else {
-            $this->renderError("View not found: $view", 404);
+        if (!file_exists($path)) {
+            $this->renderError("View not found: {$relativePath}", 404);
         }
+
+        return $path;
     }
 
-    protected function redirect($url) {
-        header("Location: $url");
-        exit;
+    protected function getSidebarPath(): string
+    {
+        $role = $_SESSION['user_role'] ?? 'user';
+        // FIXED: Swapped admin and user sidebar paths (they were reversed)
+        return ($role === 'admin') ? 'includes/admin-sidebar' : 'includes/user-sidebar';
+    }
+
+    protected function render($view, $data = []) {
+        // Start output buffering only once
+        ob_start();
+
+        // Get paths first without including any files
+        $viewPath = $this->getViewPath($view);
+        
+        $headerPath = $this->getViewPath("includes/header");
+        $footerPath = $this->getViewPath("includes/footer");
+        
+        // Get sidebar path as string, not resolved path
+        $sidebarRelativePath = $this->getSidebarPath();
+        $sidebarPath = $this->getViewPath($sidebarRelativePath);
+
+        $data['headerPath'] = $headerPath;
+        $data['sidebarPath'] = $sidebarPath;
+        $data['footerPath'] = $footerPath;
+
+        extract($data);
+        
+        // Include the files
+        
+        include $viewPath;
+
+        $content = ob_get_clean();
+        echo $content;
     }
 
     protected function renderError($message, $statusCode = 500) {
@@ -40,12 +66,26 @@ class BaseController
         $errorView = __DIR__ . "/../Views/error/$statusCode.php";
 
         if (file_exists($errorView)) {
-            $this->render("error/$statusCode", ['message' => $message]);
+            // Avoid recursion: don't use getViewPath here
+            extract(['message' => $message]);
+            ob_start();
+            include $errorView;
+            $content = ob_get_clean();
+            echo $content;
         } else {
+            // Fallback plain error message
             echo "<h1>Error: $statusCode</h1><p>$message</p>";
         }
+
         exit;
     }
+
+
+    protected function redirect($url) {
+        header("Location: $url");
+        exit;
+    }
+    
 
     protected function loadModel($model) {
         $modelClass = "App\\Models\\$model";
@@ -109,17 +149,6 @@ class BaseController
 
     protected function isGet() {
         return $_SERVER['REQUEST_METHOD'] === 'GET';
-    }
-
-    // ✅ Flash message handlers
-    protected function setFlash($key, $message) {
-        $_SESSION['flash'][$key] = $message;
-    }
-
-    protected function getFlash($key) {
-        $message = $_SESSION['flash'][$key] ?? null;
-        unset($_SESSION['flash'][$key]);
-        return $message;
     }
 
     protected function sanitize($input, $type = 'text')
