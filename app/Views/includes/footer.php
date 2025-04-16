@@ -1,81 +1,83 @@
 </div>
 </div>
 
-<!-- Bootstrap JS Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<footer class="py-3 bg-white border-top ">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <span class="fw-bold fs-5 me-2">BookSync</span>
+                    <span class="text-muted">© 2025 All rights reserved</span>
+                </div>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <a href="#" class="text-decoration-none text-muted me-3" data-bs-toggle="tooltip" data-bs-placement="top" title="View our privacy policy">Privacy Policy</a>
+                <a href="#" class="text-decoration-none text-muted me-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Read our terms of service">Terms of Service</a>
+                <a href="#" class="text-decoration-none text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Get in touch with us">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</footer>
 
-<!-- Custom JS -->
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Initialize Tooltips -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Add a class to disable transitions during initial load
-        document.body.classList.add('no-transition');
-
-        // Sidebar toggle functionality
-        const sidebarToggler = document.getElementById('sidebarToggler');
-        const toggleIcon = sidebarToggler.querySelector('i');
-
-        // Check localStorage for saved state and apply it immediately
-        if (localStorage.getItem('sidebarCollapsed') === 'true') {
-            document.body.classList.add('sidebar-collapsed');
-            toggleIcon.classList.remove('fa-chevron-left');
-            toggleIcon.classList.add('fa-chevron-right');
-        } else {
-            document.body.classList.remove('sidebar-collapsed');
-            toggleIcon.classList.remove('fa-chevron-right');
-            toggleIcon.classList.add('fa-chevron-left');
-        }
-
-        // Re-enable transitions after initial state is applied
-        setTimeout(function() {
-            document.body.classList.remove('no-transition');
-        }, 50);
-
-        sidebarToggler.addEventListener('click', function() {
-            document.body.classList.toggle('sidebar-collapsed');
-
-            // Save state to localStorage
-            localStorage.setItem('sidebarCollapsed', document.body.classList.contains('sidebar-collapsed'));
-
-            // Change toggle icon
-            if (document.body.classList.contains('sidebar-collapsed')) {
-                toggleIcon.classList.remove('fa-chevron-left');
-                toggleIcon.classList.add('fa-chevron-right');
-            } else {
-                toggleIcon.classList.remove('fa-chevron-right');
-                toggleIcon.classList.add('fa-chevron-left');
-            }
-        });
-
-        // Responsive sidebar toggle
-        if (window.innerWidth < 768) {
-            document.body.classList.remove('sidebar-collapsed');
-
-            // For mobile, we also need to check if sidebar is expanded
-            if (localStorage.getItem('sidebarExpanded') === 'true') {
-                document.body.classList.add('sidebar-expanded');
-            }
-
-            sidebarToggler.addEventListener('click', function() {
-                document.body.classList.toggle('sidebar-expanded');
-                // Save mobile expanded state separately
-                localStorage.setItem('sidebarExpanded', document.body.classList.contains('sidebar-expanded'));
-            });
-        }
-
-        // Optimize tooltip initialization
-        var tooltipOptions = {
-            delay: {
-                show: 300,
-                hide: 100
-            },
-            trigger: 'hover',
-            boundary: 'window'
-        };
-
+        // Initialize all tooltips
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.forEach(function(tooltipTriggerEl) {
-            new bootstrap.Tooltip(tooltipTriggerEl, tooltipOptions);
+            new bootstrap.Tooltip(tooltipTriggerEl);
         });
+
+        // Initialize dropdowns
+        var dropdownTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'));
+        dropdownTriggerList.forEach(function(dropdownTriggerEl) {
+            new bootstrap.Dropdown(dropdownTriggerEl);
+        });
+
+        // Sidebar toggle functionality
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.sidebar');
+        const content = document.querySelector('.content');
+
+        // Check for saved state
+        const sidebarState = localStorage.getItem('sidebarState');
+        if (sidebarState === 'collapsed') {
+            sidebar.classList.add('collapsed');
+        }
+
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Toggle sidebar state
+                sidebar.classList.toggle('collapsed');
+
+                // Save state to localStorage
+                if (sidebar.classList.contains('collapsed')) {
+                    localStorage.setItem('sidebarState', 'collapsed');
+                } else {
+                    localStorage.setItem('sidebarState', 'expanded');
+                }
+
+                // Update tooltips on sidebar items when collapsed
+                const tooltips = document.querySelectorAll('.sidebar [data-bs-toggle="tooltip"]');
+                tooltips.forEach(tooltip => {
+                    const instance = bootstrap.Tooltip.getInstance(tooltip);
+                    if (instance) {
+                        instance.dispose();
+                    }
+
+                    // Re-initialize with appropriate placement based on sidebar state
+                    new bootstrap.Tooltip(tooltip, {
+                        placement: sidebar.classList.contains('collapsed') ? 'right' : 'right',
+                        trigger: 'hover'
+                    });
+                });
+            });
+        }
     });
 </script>
 </body>

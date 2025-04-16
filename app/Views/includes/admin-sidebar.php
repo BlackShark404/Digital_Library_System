@@ -1,35 +1,57 @@
-<!-- Admin Sidebar -->
-<div class="sidebar bg-dark text-white" id="sidebar">
-    <div class="sidebar-header">
-        <i class="fas fa-user-shield d-none d-sidebar-collapsed-block"></i>
-        <h5 class="mb-0">Book Admin</h5>
+<!-- Sidebar -->
+<div class="col-md-2 sidebar">
+    <div class="position-sticky">
+        <div class="avatar-wrapper">
+            <img src="https://ui-avatars.com/api/?name=Admin+User&background=1a2236&color=fff" alt="Admin" class="avatar">
+            <div class="user-info">
+                <div class="user-name">Admin User</div>
+                <div class="user-role">Administrator</div>
+            </div>
+        </div>
+
+        <hr class="my-2">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="/admin/dashboard" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'admin-dashboard.php' ? 'active' : ''; ?>" data-bs-toggle="tooltip" data-bs-placement="right" title="View admin dashboard">
+                    <i class="fas fa-tachometer-alt"></i> <span class="menu-text">Dashboard</span>
+                </a>
+            </li>
+
+            <div class="sidebar-heading mt-3">User Management</div>
+            <li class="nav-item">
+                <a href="/admin/user-management" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'admin-users.php' ? 'active' : ''; ?>" data-bs-toggle="tooltip" data-bs-placement="right" title="Manage system users">
+                    <i class="fas fa-users"></i> <span class="menu-text">User Management</span>
+                </a>
+            </li>
+
+            <div class="sidebar-heading mt-3">Content</div>
+            <li class="nav-item">
+                <a href="admin-books.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'admin-books.php' ? 'active' : ''; ?>" data-bs-toggle="tooltip" data-bs-placement="right" title="Manage book inventory">
+                    <i class="fas fa-book"></i> <span class="menu-text">Book Management</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="admin-reading-sessions.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'admin-reading-sessions.php' ? 'active' : ''; ?>" data-bs-toggle="tooltip" data-bs-placement="right" title="View all reading sessions">
+                    <i class="fas fa-glasses"></i> <span class="menu-text">Reading Sessions</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="admin-purchases.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'admin-purchases.php' ? 'active' : ''; ?>" data-bs-toggle="tooltip" data-bs-placement="right" title="Manage book purchases">
+                    <i class="fas fa-shopping-cart"></i> <span class="menu-text">Purchases</span>
+                </a>
+            </li>
+
+            <div class="sidebar-heading mt-3">System</div>
+            <li class="nav-item">
+                <a href="admin-activity-log.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'admin-activity-log.php' ? 'active' : ''; ?>" data-bs-toggle="tooltip" data-bs-placement="right" title="View system activity logs">
+                    <i class="fas fa-history"></i> <span class="menu-text">Activity Log</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/logout" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Log out from admin panel">
+                    <i class="fas fa-sign-out-alt"></i> <span class="menu-text">Logout</span>
+                </a>
+            </li>
+        </ul>
     </div>
-    <ul class="nav flex-column">
-        <?php
-        // Define sidebar links with their icons and URLs
-        $admin_links = [
-            ['title' => 'Dashboard', 'icon' => 'tachometer-alt', 'url' => 'dashboard.php'],
-            ['title' => 'User Management', 'icon' => 'users', 'url' => 'user_management.php'],
-            ['title' => 'Book Management', 'icon' => 'book', 'url' => 'book_management.php'],
-            ['title' => 'Reading Sessions', 'icon' => 'history', 'url' => 'reading_sessions.php'],
-            ['title' => 'Purchases', 'icon' => 'shopping-cart', 'url' => 'purchases.php'],
-            ['title' => 'Activity Log', 'icon' => 'clipboard-list', 'url' => 'activity_log.php'],
-            ['title' => 'Logout', 'icon' => 'sign-out-alt', 'url' => 'logout.php']
-        ];
-
-        // Get current page filename
-        $current_page = basename($_SERVER['PHP_SELF']);
-
-        // Display each link
-        foreach ($admin_links as $link) {
-            $active = (strpos($current_page, basename($link['url'])) !== false) ? 'active' : '';
-            echo '<li class="nav-item">';
-            echo '<a class="nav-link ' . $active . '" href="' . $link['url'] . '" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="' . $link['title'] . '">';
-            echo '<i class="fas fa-' . $link['icon'] . '"></i>';
-            echo '<span>' . $link['title'] . '</span>';
-            echo '</a>';
-            echo '</li>';
-        }
-        ?>
-    </ul>
 </div>

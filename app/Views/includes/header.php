@@ -1,375 +1,420 @@
-<?php
-// Start session if not already started
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Simple function to check if user is logged in
-function is_logged_in()
-{
-    return isset($_SESSION['user_id']);
-}
-
-// Simple function to check if user is admin
-function is_admin()
-{
-    return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
-}
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($page_title) ? $page_title : 'Online Reading Platform'; ?></title>
-
+    <title>Book Management System</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Custom CSS -->
     <style>
         :root {
-            --primary-color: #3a86ff;
-            --primary-hover: #2667cc;
+            --primary-color: #5469d4;
+            --primary-light: #e6ebff;
+            --secondary-color: #1a2236;
+            --accent-color: #4caf93;
+            --light-gray: #f8f9fa;
+            --border-radius: 0.5rem;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
             --sidebar-width: 250px;
-            --sidebar-collapsed-width: 64px;
-            --sidebar-bg: #ffffff;
-            --sidebar-text: #333333;
-            --admin-sidebar-bg: #1e293b;
-            --admin-sidebar-text: #f1f5f9;
-            --header-height: 60px;
-            --transition-speed: 0.3s;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        body {
-            display: flex;
-            min-height: 100vh;
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-            overflow-x: hidden;
+            --sidebar-collapsed-width: 70px;
         }
 
         html {
-            scroll-behavior: smooth;
+        scroll-behavior: smooth;
         }
 
-        /* Sidebar Styles */
-        .sidebar {
-            width: var(--sidebar-width);
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            z-index: 100;
-            padding-top: var(--header-height);
-            box-shadow: var(--box-shadow);
-            transition: all var(--transition-speed) ease;
-        }
-
-        .sidebar .nav-link {
-            color: inherit;
-            padding: 12px 20px;
-            margin: 4px 8px;
-            border-radius: var(--border-radius);
-            transition: all 0.2s ease;
-            white-space: nowrap;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar .nav-link:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .sidebar .nav-link.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .sidebar-header {
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar-header i {
-            font-size: 1.25rem;
-        }
-
-        .sidebar-header h5 {
-            margin: 0;
-            margin-left: 10px;
-            font-weight: 600;
+        /* Base Styles */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
         }
 
         /* Navbar Styles */
         .navbar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            left: 0;
-            z-index: 200;
-            padding-left: calc(var(--sidebar-width) + 15px);
-            transition: all var(--transition-speed) ease;
-            height: var(--header-height);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--box-shadow);
             background-color: white !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .navbar-brand {
             font-weight: 600;
-            font-size: 1.2rem;
+            color: var(--secondary-color) !important;
         }
 
-        /* Content Wrapper */
-        .content-wrapper {
+        .navbar .nav-link {
+            color: #495057 !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        /* Layout Styles */
+        .container-fluid {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .container-fluid>.d-flex {
+            min-height: unset; /* Remove this min-height constraint */
+        }
+
+        .content {
             flex: 1;
-            margin-left: var(--sidebar-width);
-            padding-top: calc(var(--header-height) + 20px);
-            padding-bottom: 30px;
-            transition: all var(--transition-speed) ease;
+            transition: var(--transition);
+            padding: 1.5rem;
+            overflow-y: auto;
         }
 
-        /* Sidebar Toggler */
-        .sidebar-toggler {
-            position: fixed;
-            top: 16px;
-            left: calc(var(--sidebar-width) - 40px);
-            z-index: 300;
+        
+
+        /* Sidebar Styles */
+        .sidebar {
             background-color: white;
-            border-radius: 50%;
             box-shadow: var(--box-shadow);
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all var(--transition-speed) ease;
-            border: none;
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            overflow-y: auto;
+            padding-top: 0.4rem;
+            padding-left: 16px;
+            width: var(--sidebar-width);
+            flex-shrink: 0;
+            min-height: unset; /* Remove the min-height: 100vh */
+            height: auto;
+            top: 0;
+            overflow-y: auto;
+            max-height: 120vh;
         }
 
-        /* Collapsed Sidebar States */
-        body.no-transition .sidebar,
-        body.no-transition .content-wrapper,
-        body.no-transition .navbar,
-        body.no-transition .sidebar-toggler {
-            transition: none !important;
-        }
-
-        body.sidebar-collapsed .sidebar {
+        .sidebar.collapsed {
             width: var(--sidebar-collapsed-width);
         }
 
-        body.sidebar-collapsed .sidebar .nav-link span {
-            opacity: 0;
+        .sidebar.collapsed .menu-text,
+        .sidebar.collapsed .user-info,
+        .sidebar.collapsed .sidebar-heading {
             display: none;
         }
 
-        body.sidebar-collapsed .sidebar .nav-link {
-            justify-content: center;
-            padding: 12px 0;
+        .sidebar.collapsed .avatar-wrapper {
+            padding: 0.75rem 0;
+            padding-left: 6px;
         }
 
-        body.sidebar-collapsed .sidebar .nav-link i {
+        .sidebar.collapsed .avatar {
+            width: 40px;
+            height: 40px;
+        }
+
+        .sidebar.collapsed .nav-link {
+            text-align: center;
+            padding: 0.75rem 0;
+        }
+
+        .sidebar.collapsed .nav-link i {
             margin-right: 0;
             font-size: 1.2rem;
         }
 
-        body.sidebar-collapsed .sidebar-toggler {
-            left: calc(var(--sidebar-collapsed-width) - 16px);
-        }
-
-        body.sidebar-collapsed .content-wrapper,
-        body.sidebar-collapsed .navbar {
+        .content.expanded {
+            width: calc(100% - var(--sidebar-collapsed-width));
             margin-left: var(--sidebar-collapsed-width);
-            padding-left: 15px;
         }
 
-        body.sidebar-collapsed .sidebar-header h5 {
-            display: none;
+        .sidebar .nav-link {
+            color: #495057;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--border-radius);
+            margin: 0.25rem 0.75rem;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
         }
 
-        /* Icon Styles */
         .sidebar .nav-link i {
             min-width: 24px;
             margin-right: 10px;
             text-align: center;
         }
 
-        .d-sidebar-collapsed-block {
-            display: none;
+        .sidebar .nav-link:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
         }
 
-        body.sidebar-collapsed .d-sidebar-collapsed-block {
-            display: block;
+        .sidebar .nav-link.active {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            font-weight: 600;
         }
 
-        /* Tooltip Styles */
-        .tooltip {
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.1s ease;
+        .sidebar-heading {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            font-weight: 700;
+            padding: 0.75rem 1.25rem;
+            color: #8697a8;
         }
 
-        .tooltip.show {
-            opacity: 0.9;
+        /* User Profile */
+        .avatar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 1rem;
+            transition: var(--transition);
         }
 
-        .tooltip .tooltip-inner {
-            background-color: #333;
-            border-radius: 4px;
-            padding: 6px 10px;
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 3px solid white;
+            transition: var(--transition);
         }
 
-        /* Responsive for Mobile */
-        @media (max-width: 768px) {
-            .sidebar {
-                margin-left: calc(-1 * var(--sidebar-width));
-                box-shadow: none;
-            }
-
-            .content-wrapper,
-            .navbar {
-                margin-left: 0;
-                padding-left: 15px;
-            }
-
-            .sidebar-toggler {
-                left: 10px;
-                background-color: var(--primary-color);
-                color: white;
-            }
-
-            body.sidebar-expanded .sidebar {
-                margin-left: 0;
-                width: var(--sidebar-width);
-                box-shadow: var(--box-shadow);
-            }
-
-            body.sidebar-expanded .sidebar .nav-link span {
-                display: inline-block;
-                opacity: 1;
-            }
-
-            body.sidebar-expanded .sidebar .nav-link {
-                text-align: left;
-                padding: 12px 20px;
-                justify-content: flex-start;
-            }
-
-            body.sidebar-expanded .sidebar .nav-link i {
-                margin-right: 10px;
-            }
-            
-            /* Add a backdrop for mobile sidebar */
-            body.sidebar-expanded::before {
-                content: "";
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 99;
-            }
+        .user-info {
+            margin-top: 0.75rem;
+            text-align: center;
+            transition: var(--transition);
         }
 
-        /* Admin Sidebar Specific Styles */
-        .sidebar.bg-dark {
-            background-color: var(--admin-sidebar-bg) !important;
-            color: var(--admin-sidebar-text);
+        .user-name {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.25rem;
         }
 
-        .sidebar.bg-dark .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        .user-role {
+            font-size: 0.85rem;
+            color: #8697a8;
         }
 
-        .sidebar.bg-dark .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.2);
+        /* Cards & Components */
+        .card {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            height: 100%;
         }
 
-        /* Custom Button Styles */
+        .card:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1rem 1.25rem;
+        }
+
+        .card-title {
+            margin-bottom: 0;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        .stat-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #8697a8;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        /* Tables & Lists */
+        .table {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background-color: var(--light-gray);
+            font-weight: 600;
+            color: var(--secondary-color);
+            border-top: none;
+            padding: 0.75rem 1rem;
+        }
+
+        .list-group-item {
+            border: none;
+            border-radius: var(--border-radius) !important;
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            transition: var(--transition);
+        }
+
+        .list-group-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        /* Buttons & Interactive Elements */
+        .btn {
+            border-radius: var(--border-radius);
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
         }
 
         .btn-primary:hover {
-            background-color: var(--primary-hover);
-            border-color: var(--primary-hover);
+            background-color: #4258c5;
+            border-color: #4258c5;
+        }
+
+        #sidebarToggle {
+            background-color: transparent;
+            border: none;
+            color: #495057;
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #sidebarToggle:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .dropdown-menu {
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        footer {
+            margin-top: auto;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sidebar {
+                margin-left: calc(-1 * var(--sidebar-width));
+                position: fixed;
+                z-index: 1000;
+                height: 100%;
+            }
+
+            .sidebar.expanded {
+                margin-left: 0;
+            }
+
+            .content {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .sidebar.collapsed {
+                margin-left: calc(-1 * var(--sidebar-collapsed-width));
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
-            <div class="navbar-brand">
-                <?php echo isset($page_title) ? $page_title : 'Online Reading Platform'; ?>
-            </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+        <div class="container-fluid me-2">
+            <button id="sidebarToggle" class="btn ms-2 me-3" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Toggle sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="index.php">BookSync</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <?php if (is_logged_in()): ?>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user-circle me-1"></i>
-                                <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'User'; ?>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="<?php echo is_admin() ? 'admin/profile.php' : 'user/profile.php'; ?>">
-                                    <i class="fas fa-id-badge me-2"></i>Profile</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="logout.php">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                            </ul>
-                        </li>
-                    <?php else: ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="login.php"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="register.php"><i class="fas fa-user-plus me-1"></i> Register</a>
-                        </li>
-                    <?php endif; ?>
+                <form class="d-flex ms-auto me-3">
+                    <div class="input-group">
+                        <input class="form-control" type="search" placeholder="Search..." aria-label="Search">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View notifications">
+                            <i class="fas fa-bell"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <img src="https://ui-avatars.com/api/?name=John+Doe&background=5469d4&color=fff" class="rounded-circle me-2" width="32" height="32" alt="User">
+                            <span>Account</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile.php" data-bs-toggle="tooltip" data-bs-placement="left" title="View your profile"><i class="fas fa-user me-2"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="settings.php" data-bs-toggle="tooltip" data-bs-placement="left" title="Change your settings"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="/logout" data-bs-toggle="tooltip" data-bs-placement="left" title="Log out of your account"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Sidebar Toggle Button -->
-    <button class="sidebar-toggler" id="sidebarToggler">
-        <i class="fas fa-chevron-left"></i>
-    </button>
-
-    <?php
-    // Include appropriate sidebar based on user role
-    if (is_logged_in()) {
-        if (is_admin()) {
-            include 'includes/admin_sidebar.php';
-        } else {
-            include 'includes/user_sidebar.php';
-        }
-    }
-    ?>
-
-    <!-- Main Content -->
-    <div class="content-wrapper">
-        <div class="container-fluid">
+    <div class="container-fluid">
+        <div class="d-flex">
