@@ -42,6 +42,7 @@ $router->map('GET', '/logout', 'App\Controllers\AuthController#logout', 'logout'
 // Admin routes
 $router->map('GET', '/admin/dashboard', 'App\Controllers\AdminController#adminDashboard', 'admin_dashboard');
 $router->map('GET', '/admin/user-management', 'App\Controllers\AdminController#userManagement', 'user-management');
+$router->map('POST', '/admin/user-management', 'App\Controllers\UserController#registerUsers', 'register-users');
 
 // User routes
 $router->map('GET', '/user/dashboard', 'App\Controllers\UserController#dashboard', 'user_dashboard');
@@ -50,3 +51,12 @@ $router->map('GET', '/user/dashboard', 'App\Controllers\UserController#dashboard
 $router->map('GET', '/error/404', 'App\Controllers\ErrorController#error404', 'error_404');
 $router->map('GET', '/error/403', 'App\Controllers\ErrorController#error403', 'error_403');
 $router->map('GET', '/error/500', 'App\Controllers\ErrorController#error500', 'error_500');
+
+$router->map('GET', '/test', 'App\Controllers\TestController#showTestView', 'test');
+$router->map('POST', '/test', 'App\Controllers\TestController#getData', 'form_submission');
+$router->map('GET', '/view', 'App\Controllers\TestController#viewData', 'view-data');
+
+
+$router->map('GET', '/test-modal', 'App\Controllers\TestController#showTestModal', 'show-modal');
+$router->map('POST', '/test-modal', 'App\Controllers\TestController#testModal', 'test-modal');
+

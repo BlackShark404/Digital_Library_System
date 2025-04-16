@@ -156,7 +156,7 @@
                 <h4 class="card-title mb-4">Create an account</h4>
             </div>
             <div class="card-body p-4">
-                <form action="login_process.php" method="post">
+                <form id="registerForm">
                     <div class="row mb-3">
                         <div class="col-md-6 mb-3 mb-md-0">
                             <label for="firstName" class="form-label">First name</label>
@@ -164,7 +164,7 @@
                                 <span class="input-group-text">
                                     <i class="fas fa-user"></i>
                                 </span>
-                                <input type="text" class="form-control" id="firstName" name="firstName" placeholder="John" required>
+                                <input type="text" class="form-control" id="firstName" name="fname" placeholder="John" required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -173,7 +173,7 @@
                                 <span class="input-group-text">
                                     <i class="fas fa-user"></i>
                                 </span>
-                                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Doe" required>
+                                <input type="text" class="form-control" id="lastName" name="lname" placeholder="Doe" required>
                             </div>
                         </div>
                     </div>
@@ -231,6 +231,9 @@
         </div>
     </div>
 
+    <script src="/assets/js/utility/toast.js"></script>
+    <?php include __DIR__ . '/../../Views/toast/toast-view.php' ?>
+
     <!-- Bootstrap & jQuery JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -262,6 +265,14 @@
                 document.getElementById('confirmPassword').focus();
             }
         });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="assets/js/utility/toast-notifications.js"></script>
+    <script src="assets/js/utility/form-handler.js"></script>
+    
+    <script>
+        handleFormSubmission('registerForm', '/register'); 
     </script>
 </body>
 

@@ -32,9 +32,13 @@ class UserModel extends BaseModel
         'email',
         'password',
         'role',
-        'created_at',
-        'updated_at'
+        'is_active',
+        'remember_token',
+        'last_login'
     ];
+
+    protected $timestamps = true;
+    protected $useSoftDeletes = true;
 
     
     /**
@@ -70,7 +74,7 @@ class UserModel extends BaseModel
     }
     
     /**
-     * Search users by name or email
+     * Search users by first name, last name or email
      * 
      * @param string $searchTerm
      * @return array
@@ -78,9 +82,11 @@ class UserModel extends BaseModel
     public function search($searchTerm)
     {
         $sql = "SELECT * FROM {$this->table} 
-                WHERE name ILIKE :term 
+                WHERE fname ILIKE :term 
+                OR lname ILIKE :term
                 OR email ILIKE :term
-                ORDER BY name ASC";
+                AND deleted_at IS NULL
+                ORDER BY lname ASC, fname ASC";
         
         return $this->rawQuery($sql, ['term' => "%$searchTerm%"]);
     }
@@ -149,28 +155,6 @@ class UserModel extends BaseModel
     }
     
     /**
-     * Get user with related posts
-     * 
-     * @param int $userId
-     * @return array
-     */
-    public function getUserWithPosts($userId)
-    {
-        $user = $this->find($userId);
-        
-        if (!$user) {
-            return null;
-        }
-        
-        // Assuming there's a posts table with user_id as foreign key
-        $sql = "SELECT p.* FROM posts p WHERE p.user_id = :user_id ORDER BY p.created_at DESC";
-        $posts = $this->rawQuery($sql, ['user_id' => $userId]);
-        
-        $user['posts'] = $posts;
-        return $user;
-    }
-    
-    /**
      * Check if email exists
      * 
      * @param string $email
@@ -189,12 +173,175 @@ class UserModel extends BaseModel
      */
     public function getActiveUsers($days = 30)
     {
-        $sql = "SELECT u.*, 
-                (SELECT COUNT(*) FROM posts WHERE user_id = u.id) as post_count
-                FROM {$this->table} u
-                WHERE u.last_login_at >= NOW() - INTERVAL ':days days'
-                ORDER BY post_count DESC";
+        $sql = "SELECT * FROM {$this->table} u
+                WHERE u.is_active = TRUE
+                AND u.last_login >= NOW() - INTERVAL ':days days'
+                AND u.deleted_at IS NULL
+                ORDER BY u.last_login DESC";
         
         return $this->rawQuery($sql, ['days' => $days]);
+    }
+
+    /**
+     * Find a user by remember token
+     * 
+     * @param string $token
+     * @return array|null
+     */
+    public function findByRememberToken($token)
+    {
+        return $this->firstWhere('remember_token', $token);
+    }
+    
+    /**
+     * Update user's last login time
+     * 
+     * @param int $userId
+     * @return bool
+     */
+    public function updateLastLogin($userId)
+    {
+        $data = [
+            'last_login' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+        
+        return $this->update($userId, $data);
+    }
+    
+    /**
+     * Generate a remember token for a user
+     * 
+     * @param int $userId
+     * @return string The generated token
+     */
+    public function generateRememberToken($userId)
+    {
+        $token = bin2hex(random_bytes(32));
+        
+        $this->update($userId, [
+            'remember_token' => $token,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+        
+        return $token;
+    }
+    
+    /**
+     * Clear a user's remember token
+     * 
+     * @param int $userId
+     * @return bool
+     */
+    public function clearRememberToken($userId)
+    {
+        return $this->update($userId, [
+            'remember_token' => null,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+    }
+    
+    /**
+     * Get a user's full name
+     * 
+     * @param array $user User data array
+     * @return string
+     */
+    public function getFullName($user)
+    {
+        return $user['fname'] . ' ' . $user['lname'];
+    }
+    
+    /**
+     * Activate a user account
+     * 
+     * @param int $userId
+     * @return bool
+     */
+    public function activateUser($userId)
+    {
+        return $this->update($userId, [
+            'is_active' => true,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+    }
+    
+    /**
+     * Deactivate a user account
+     * 
+     * @param int $userId
+     * @return bool
+     */
+    public function deactivateUser($userId)
+    {
+        return $this->update($userId, [
+            'is_active' => false,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+    }
+    
+    /**
+     * Get only active users
+     * 
+     * @return array
+     */
+    public function getActiveOnly()
+    {
+        return $this->where('is_active', true);
+    }
+    
+    /**
+     * Get users who haven't logged in for a specific period
+     * 
+     * @param int $days Number of days
+     * @return array
+     */
+    public function getInactiveUsers($days = 90)
+    {
+        $sql = "SELECT * FROM {$this->table} 
+                WHERE (last_login IS NULL OR last_login < NOW() - INTERVAL ':days days')
+                AND deleted_at IS NULL
+                ORDER BY last_login ASC NULLS FIRST";
+        
+        return $this->rawQuery($sql, ['days' => $days]);
+    }
+    
+    /**
+     * Get admin users
+     * 
+     * @return array
+     */
+    public function getAdmins()
+    {
+        return $this->where('role', 'admin');
+    }
+    
+    /**
+     * Get regular users
+     * 
+     * @return array
+     */
+    public function getRegularUsers()
+    {
+        return $this->where('role', 'user');
+    }
+    
+    /**
+     * Change user role
+     * 
+     * @param int $userId
+     * @param string $role Must be 'user' or 'admin'
+     * @return bool
+     */
+    public function changeRole($userId, $role)
+    {
+        if (!in_array($role, ['user', 'admin'])) {
+            return false;
+        }
+        
+        return $this->update($userId, [
+            'role' => $role,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
     }
 }

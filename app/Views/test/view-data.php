@@ -10,11 +10,10 @@ use Core\Session;
     <title>Document</title>
 </head>
 <body>
-    <h1>Welcome to the User Dashboard</h1>
-    <p><?= Session::get("user_id"); ?></p>
-    <p><?= Session::get("user_name"); ?></p>
-    <p><?= Session::get("user_email"); ?></p>
-    <p><?= Session::get("user_role"); ?></p>
+    <h1>Data collected form the form submission</h1>
+
+    <p>Name: <?= Session::get('name') ?> </p>
+    <p>Age: <?= Session::get('age') ?> </p>
 
 </body>
 </html>

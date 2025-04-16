@@ -557,7 +557,7 @@
                 <div class="col-lg-10">
                     <div class="row align-items-center mb-5">
                         <div class="col-md-6 order-md-2 mb-4 mb-md-0">
-                            <img src="/api/placeholder/500/300" alt="Create Account" class="img-fluid rounded-3 shadow">
+                            <img src="/assets/images/create_acc.png" alt="Create Account" class="img-fluid rounded-3 shadow">
                         </div>
                         <div class="col-md-6 order-md-1">
                             <div class="d-flex align-items-center mb-3">
@@ -718,15 +718,10 @@
         </div>
     </footer>
 
-    <?php
-    ?>
-
     
-
-
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/js/utility/toast.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Select all FAQ question buttons

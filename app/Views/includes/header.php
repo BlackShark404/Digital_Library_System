@@ -39,6 +39,7 @@
             box-shadow: var(--box-shadow);
             background-color: white !important;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 100px;
         }
 
         .navbar-brand {
@@ -90,7 +91,7 @@
             height: auto;
             top: 0;
             overflow-y: auto;
-            max-height: 120vh;
+            max-height: 200vh;
         }
 
         .sidebar.collapsed {
@@ -378,7 +379,7 @@
             <button id="sidebarToggle" class="btn ms-2 me-3" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Toggle sidebar">
                 <i class="fas fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="index.php">BookSync</a>
+            <a class="navbar-brand" href="/">BookSync</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>

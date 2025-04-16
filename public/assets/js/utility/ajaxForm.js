@@ -1,4 +1,3 @@
-// ajaxForm.js
 function handleAjaxFormSubmit(formId, actionUrl, successCallback, errorCallback) {
     const form = document.getElementById(formId);
 
@@ -8,7 +7,7 @@ function handleAjaxFormSubmit(formId, actionUrl, successCallback, errorCallback)
     }
 
     form.addEventListener('submit', async function (e) {
-        e.preventDefault();  // Prevent the default form submission
+        e.preventDefault();
 
         const formData = new FormData(form);
         const data = {};
@@ -18,15 +17,15 @@ function handleAjaxFormSubmit(formId, actionUrl, successCallback, errorCallback)
         });
 
         try {
-            const response = await axios.post(actionUrl, data);
+            const response = await axios.post(actionUrl, JSON.stringify(data), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
 
-            if (response.data.success) {
-                // Call success callback (e.g., redirect, success message, etc.)
-                successCallback(response.data);
-            } else {
-                // Call error callback (e.g., display error message)
-                errorCallback(response.data.message);
-            }
+            // Pass the entire response data to successCallback
+            successCallback(response.data);
         } catch (err) {
             console.error(err);
             errorCallback('Something went wrong. Please try again.');

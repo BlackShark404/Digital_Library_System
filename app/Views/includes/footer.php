@@ -1,7 +1,7 @@
 </div>
 </div>
 
-<footer class="py-3 bg-white border-top ">
+<footer class="py-3 bg-white border-top sticky-bottom">
     <div class="container">
         <div class="row">
             <div class="col-md-6">
@@ -80,6 +80,11 @@
         }
     });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="assets/js/utility/toast-notifications.js"></script>
+<script src="assets/js/utility/form-handler.js"></script>
+
 </body>
 
 </html>

@@ -139,7 +139,7 @@
                 <h4 class="card-title mb-4">Sign in to your account</h4>
             </div>
             <div class="card-body p-4">
-                <form action="dashboard.php" method="post">
+                <form id="loginForm">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
                         <div class="input-group">
@@ -182,6 +182,10 @@
         </div>
     </div>
 
+    <script src="/assets/js/utility/toast.js"></script>
+    <?php include __DIR__ . '/../../Views/toast/toast-view.php' ?>
+
+
     <!-- Bootstrap & jQuery JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -202,6 +206,15 @@
             }
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="assets/js/utility/toast-notifications.js"></script>
+    <script src="assets/js/utility/form-handler.js"></script>
+    
+    <script>
+        handleFormSubmission('loginForm', '/login'); 
+    </script>
+    
 </body>
 
 </html>
